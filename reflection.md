@@ -4,6 +4,14 @@
 
 **a. Initial design**
 
+**Three core user actions:**
+
+1. **Enter owner and pet information** — The user provides basic details about themselves and their pet (e.g., pet name, species/breed, owner's available time per day, and any care preferences). This context constrains what the scheduler can realistically plan.
+
+2. **Add and manage care tasks** — The user creates, edits, or removes pet care tasks such as walks, feeding, medication, grooming, and enrichment activities. Each task has at minimum a duration (how long it takes) and a priority (how critical it is), so the scheduler can make informed decisions about what to include when time is limited.
+
+3. **Generate and view a daily plan** — The user triggers the scheduler to produce a daily care plan. The app selects and orders tasks based on available time, priorities, and preferences, then displays the resulting schedule along with an explanation of why certain tasks were included or excluded.
+
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
 
