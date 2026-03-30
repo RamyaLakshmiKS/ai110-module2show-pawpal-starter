@@ -26,8 +26,15 @@ The initial UML includes five classes arranged around a central `Scheduler`:
 
 **b. Design changes**
 
-- Did your design change during implementation?
-- If yes, describe at least one change and why you made it.
+After reviewing the initial skeleton, four problems were identified and fixed before implementing any logic:
+
+1. **`pet` moved into `Owner.__init__`** — The original skeleton set `self.pet = None` as a bare attribute with no way to pass a `Pet` at construction time. This made it easy to forget to assign the pet after creating an owner. Adding `pet` as an optional constructor parameter makes the relationship explicit and keeps object creation self-contained.
+
+2. **Removed `Owner.has_time_for(task)`** — This method duplicated the time-check logic already present in `Scheduler._fits_in_time`. The key difference is that `Owner.available_minutes` is the full-day budget (never decremented), while the scheduler needs a shrinking `remaining_minutes` counter as tasks are added. Keeping both would produce inconsistent results. The check now lives exclusively in `Scheduler`, and `build_plan` will use a local `remaining_minutes` variable so the owner's stored value is never mutated.
+
+3. **Added `PRIORITY_RANK` constant and validation** — Priority was stored as a raw string (`"high"` / `"medium"` / `"low"`) with no enforcement. A typo like `"High"` or `"urgent"` would pass through silently and break `_sort_by_priority`. A module-level `PRIORITY_RANK` dict (`{"high": 0, "medium": 1, "low": 2}`) now serves as both the sort key and the validation whitelist — `Task.__init__` raises `ValueError` if the priority isn't in it.
+
+4. **Replaced `list[tuple]` with `SkippedTask` named tuple** — `skipped_tasks` was typed as `list[tuple]` with the structure `(task, reason)` documented only in a comment. Nothing prevented the fields from being swapped or extended inconsistently. A `SkippedTask(task, reason)` named tuple makes the structure explicit, self-documenting, and accessible by name rather than index.
 
 ---
 
