@@ -12,8 +12,17 @@
 
 3. **Generate and view a daily plan** — The user triggers the scheduler to produce a daily care plan. The app selects and orders tasks based on available time, priorities, and preferences, then displays the resulting schedule along with an explanation of why certain tasks were included or excluded.
 
-- Briefly describe your initial UML design.
-- What classes did you include, and what responsibilities did you assign to each?
+The initial UML includes five classes arranged around a central `Scheduler`:
+
+- **`Task`** — represents a single pet care activity. Holds the task name, how long it takes (`duration_minutes`), its `priority` (high/medium/low), a `category` (walk, feeding, medication, etc.), and optional notes. Responsible only for describing itself — it has no scheduling logic.
+
+- **`Pet`** — holds descriptive information about the animal: name, species, breed, and age. Its only responsibility is to provide a readable summary of the pet. Age and species are stored because they could influence which tasks are relevant (e.g., a senior dog may need shorter walks).
+
+- **`Owner`** — represents the person using the app. Stores their name, how many minutes they have available today, and any care preferences. Also holds a reference to their `Pet`. Responsible for answering whether a given task fits within the time they have left.
+
+- **`Scheduler`** — the core logic class. Takes an `Owner` and a list of `Task` objects, then decides which tasks to include in the day's plan based on available time and priority. Internally sorts tasks by priority and checks each one against remaining time before committing it to the plan.
+
+- **`DailyPlan`** — the output produced by `Scheduler`. Holds the final ordered list of scheduled tasks, a list of skipped tasks with reasons, and the total time committed. Responsible for formatting the plan for display and generating a plain-language explanation of the scheduling decisions.
 
 **b. Design changes**
 
